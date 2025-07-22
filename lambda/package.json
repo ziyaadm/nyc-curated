@@ -1,0 +1,9 @@
+{
+  "name": "nyc-curated-lambdas",
+  "version": "1.0.0",
+  "description": "Lambda functions for NYC Curated app",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0"
+  }
+}
