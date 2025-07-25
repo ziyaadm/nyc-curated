@@ -84,7 +84,8 @@ nyc-curated/
 
 **Live Site**: https://d27p3gw2aa2p40.cloudfront.net  
 **API Endpoint**: https://kvax6bff90.execute-api.us-east-1.amazonaws.com/prod/  
-**Data Loaded**: 179 places successfully loaded into DynamoDB
+**Data Loaded**: 179 places successfully loaded into DynamoDB  
+**Display Status**: All 179 places now visible on frontend (limit issue fixed)
 
 ### Phase 2 Frontend - COMPLETED ✅
 
