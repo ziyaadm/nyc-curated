@@ -5,6 +5,7 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 export class NycCuratedStack extends cdk.Stack {
@@ -91,9 +92,10 @@ export class NycCuratedStack extends cdk.Stack {
       restApiName: 'NYC Curated API',
       description: 'API for NYC recommendations app',
       defaultCorsPreflightOptions: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: apigateway.Cors.ALL_METHODS,
-        allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key']
+        allowOrigins: ['https://nyc.ziyaadm.com', 'http://localhost:3000'],
+        allowMethods: ['GET', 'OPTIONS'],
+        allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key'],
+        allowCredentials: false
       }
     });
 
@@ -103,21 +105,33 @@ export class NycCuratedStack extends cdk.Stack {
     
     nearbyResource.addMethod('GET', new apigateway.LambdaIntegration(getNearbyPlacesFunction));
 
+    // Origin Access Identity for CloudFront
+    const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
+      comment: 'OAI for NYC Curated S3 bucket'
+    });
+
     // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultBehavior: {
-        origin: new origins.S3Origin(websiteBucket),
+        origin: new origins.S3Origin(websiteBucket, {
+          originAccessIdentity
+        }),
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED
+        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
       },
       additionalBehaviors: {
         '/api/*': {
           origin: new origins.RestApiOrigin(api),
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
         }
       }
     });
+
+    // Grant CloudFront OAI access to S3 bucket
+    websiteBucket.grantRead(originAccessIdentity);
 
     // Outputs
     new cdk.CfnOutput(this, 'WebsiteURL', {
