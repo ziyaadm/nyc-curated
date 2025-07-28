@@ -2,7 +2,7 @@
 
 A world-class serverless web application showcasing 179+ personally curated NYC spots, built with modern cloud architecture and cutting-edge frontend design.
 
-**🌐 Live Site**: [https://d27p3gw2aa2p40.cloudfront.net](https://d27p3gw2aa2p40.cloudfront.net)
+**🌐 Live Site**: [https://nyc-curated.ziyaadm.com](https://nyc-curated.ziyaadm.com)
 
 ![NYC Curated Hero](https://img.shields.io/badge/Status-Live%20%26%20Deployed-success?style=for-the-badge)
 ![AWS](https://img.shields.io/badge/AWS-Serverless-orange?style=for-the-badge&logo=amazon-aws)
