@@ -1,3 +1,6 @@
+# Hero Component Code
+
+```tsx
 import { useState, useEffect } from 'react';
 
 export const Hero = () => {
@@ -97,3 +100,4 @@ export const Hero = () => {
     </div>
   );
 };
+```
