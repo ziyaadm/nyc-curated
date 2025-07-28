@@ -1,6 +1,8 @@
 # CDK
 *.js
 !jest.config.js
+!scripts/*.js
+!lambda/*.js
 *.d.ts
 node_modules
 cdk.out
@@ -10,6 +12,14 @@ cdk.context.json
 # Lambda
 lambda/node_modules
 lambda/*.zip
+
+# Frontend build
+frontend/dist/
+frontend/node_modules/
+
+# Development/testing files
+test-payload.json
+response.json
 
 # Data files (sensitive)
 data.csv
